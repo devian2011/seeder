@@ -1,0 +1,10 @@
+databases:
+  - code: seeder
+    dsn: "env('MARIADB_DSN')"
+    user: "env('MARIADB_USER')"
+    password: "env('MARIADB_PASSWORD')"
+  - code: seeder2
+    dsn: "env('MARIADB_DSN2')"
+    user: "env('MARIADB_USER2')"
+    password: "env('MARIADB_PASSWORD2')"
+

@@ -1,0 +1,12 @@
+tables:
+  users:
+    database: seeder
+    mods:
+      - fake
+      - test
+    name: users
+    rowQuantity: "100"
+    primaryKey: id
+    columns:
+      - name: id
+        value: "increment()"
