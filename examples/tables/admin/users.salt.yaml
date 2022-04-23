@@ -9,7 +9,13 @@ tables:
     primaryKey: id
     columns:
       - name: id
-        value: "increment()"
-      - name: id_user
-        value: "relation('oneToOne', 'seeder', 'users', 'id')"
+        value: "increment"
+      - name: user_id
+        value: "relation"
+    relations:
+      - name: user_id
+        database: seeder
+        table: user
+        column: id
+        type: oneToOne
 

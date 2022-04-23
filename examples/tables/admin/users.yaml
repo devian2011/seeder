@@ -9,4 +9,8 @@ tables:
     primaryKey: id
     columns:
       - name: id
-        value: "increment()"
+        value: "increment"
+      - name: login
+        value: "faker.email()"
+      - name: password
+        value: "faker.text()"

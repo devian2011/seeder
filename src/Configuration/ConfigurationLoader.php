@@ -71,11 +71,13 @@ class ConfigurationLoader extends \Symfony\Component\ExpressionLanguage\Expressi
         $result = [];
         foreach ($tables as $table) {
             $columns = $this->buildColumns($table['columns']);
+            $relativeColumns = $this->buildRelativeColumns($table['relations'] ?? []);
             $result[] = new Table(
                 $table['database'],
                 $table['name'],
                 $table['mods'],
                 $columns,
+                $relativeColumns,
                 $table['rowQuantity'],
                 $table['primaryKey']
             );
@@ -88,6 +90,22 @@ class ConfigurationLoader extends \Symfony\Component\ExpressionLanguage\Expressi
         $result = [];
         foreach ($columns as $column) {
             $result[] = new Column($column['name'], $column['value']);
+        }
+        return $result;
+    }
+
+    private function buildRelativeColumns(array $columns): array
+    {
+        $result = [];
+        foreach ($columns as $column) {
+            $result[] = new RelativeColumn(
+                $column['name'],
+                $column['database'],
+                $column['table'],
+                $column['column'],
+                $column['type'],
+                $column['throughTable'] ?? null
+            );
         }
         return $result;
     }

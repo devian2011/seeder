@@ -16,6 +16,8 @@ class Table
     private array $mods;
     /** @var Column[] */
     private array $columns;
+    /** @var RelativeColumn[] */
+    private array $relations;
     /** @var string */
     private string $rowQuantity;
     /** @var string|array */
@@ -26,6 +28,7 @@ class Table
      * @param string $name
      * @param array $mods
      * @param array $columns
+     * @param array $relations
      * @param string $rowQuantity
      * @param string|array $primaryKey
      */
@@ -34,6 +37,7 @@ class Table
         string $name,
         array  $mods,
         array  $columns,
+        array  $relations,
         string $rowQuantity,
                $primaryKey = 'id'
     )
@@ -42,6 +46,7 @@ class Table
         $this->name = $name;
         $this->mods = $mods;
         $this->columns = $columns;
+        $this->relations = $relations;
         $this->rowQuantity = $rowQuantity;
         $this->primaryKey = $primaryKey;
     }
@@ -76,6 +81,22 @@ class Table
     public function getColumns(): array
     {
         return $this->columns;
+    }
+
+    /**
+     * @return RelativeColumn[]
+     */
+    public function getRelations(): array
+    {
+        return $this->relations;
+    }
+
+    /**
+     * @return array|string
+     */
+    public function getPrimaryKey()
+    {
+        return $this->primaryKey;
     }
 
     /**

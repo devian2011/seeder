@@ -4,17 +4,22 @@ namespace Devian2011\Seeder;
 
 use Devian2011\Seeder\Configuration\ConfigurationLoader;
 use Devian2011\Seeder\Configuration\Table;
+use Devian2011\Seeder\Expressions\InternalExpressionLanguage;
 use Symfony\Component\Dotenv\Dotenv;
+use Symfony\Component\ExpressionLanguage\ExpressionFunctionProviderInterface;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
+use function Webmozart\Assert\Tests\StaticAnalysis\null;
 
 class Seeder
 {
-
-    private const AVAILABLE_MODES = [Table::TABLE_MODE_FAKE, Table::TABLE_MODE_PREDEFINED, Table::TABLE_MODE_TEST];
+    private const AVAILABLE_MODES = [
+        Table::TABLE_MODE_FAKE,
+        Table::TABLE_MODE_PREDEFINED,
+        Table::TABLE_MODE_TEST
+    ];
 
     private ConfigurationLoader $configurationLoader;
     private array $params;
-    private ExpressionLanguage $expressionLanguage;
 
     public function __construct(string $templateDir, string $mode, array $paramFiles)
     {
@@ -32,15 +37,21 @@ class Seeder
 
         $this->configurationLoader = new ConfigurationLoader($templateDir);
         $this->params = $paramFiles;
-        $this->expressionLanguage = ExpressionLanguageConfigurator::configure();
     }
 
 
-    public function run()
+    public function run(ExpressionFunctionProviderInterface $functionProvider = null)
     {
+        $expressions = new ExpressionLanguage(null, [
+            new InternalExpressionLanguage()
+        ]);
+        if (!empty($functionProvider)) {
+            $expressions->registerProvider($functionProvider);
+        }
+
         (new Dotenv())->load(...$this->params);
-        $config = $this->configurationLoader->build($this->expressionLanguage);
-        var_export($config);
+        $config = $this->configurationLoader->build($expressions);
+        var_export($config);die();
     }
 
 }
