@@ -22,14 +22,17 @@ class Table
     private string $rowQuantity;
     /** @var string|array */
     private $primaryKey;
+    /** @var array */
+    private $fixed = [];
 
     /**
      * @param string $database
      * @param string $name
      * @param array $mods
-     * @param array $columns
-     * @param array $relations
+     * @param Column[] $columns
+     * @param RelativeColumn[] $relations
      * @param string $rowQuantity
+     * @param Column[] $fixed
      * @param string|array $primaryKey
      */
     public function __construct(
@@ -39,16 +42,22 @@ class Table
         array  $columns,
         array  $relations,
         string $rowQuantity,
+        array  $fixed = [],
                $primaryKey = 'id'
     )
     {
         $this->database = $database;
         $this->name = $name;
         $this->mods = $mods;
-        $this->columns = $columns;
-        $this->relations = $relations;
+        foreach ($columns as $column) {
+            $this->columns[$column->getName()] = $column;
+        }
+        foreach ($relations as $relation) {
+            $this->relations[$relation->getName()] = $relation;
+        }
         $this->rowQuantity = $rowQuantity;
         $this->primaryKey = $primaryKey;
+        $this->fixed = $fixed;
     }
 
     /**
@@ -105,5 +114,13 @@ class Table
     public function getRowQuantity(): string
     {
         return $this->rowQuantity;
+    }
+
+    /**
+     * @return Column[]
+     */
+    public function getFixed(): array
+    {
+        return $this->fixed;
     }
 }

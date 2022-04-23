@@ -1,0 +1,25 @@
+tables:
+  roles:
+    database: seeder
+    mods:
+      - fake
+      - test
+    name: transactions
+    rowQuantity: 1000
+    primaryKey: id
+    columns:
+      - name: id
+        value: 'auto_increment'
+      - name: name
+        value: 'faker.name()'
+      - name: is_active
+        value: 'faker.boolean()'
+    fixed:
+      - - name: id
+          value: 1
+        - name: name
+          value: admin
+      - - name: id
+          value: 2
+        - name: name
+          value: developer

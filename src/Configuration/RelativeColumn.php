@@ -6,7 +6,6 @@ class RelativeColumn
 {
     private const RELATION_ONE_TO_ONE = 'oneToOne';
     private const RELATION_MANY_TO_ONE = 'manyToOne';
-    private const RELATION_ONE_TO_MANY = 'oneToMany';
     private const MANY_TO_MANY = 'manyToMany';
 
     private string $name;

@@ -1,0 +1,21 @@
+tables:
+  transactions:
+    database: seeder
+    mods:
+      - fake
+      - test
+    name: transactions
+    rowQuantity: 1000
+    primaryKey: id
+    columns:
+      - name: id
+        value: "increment"
+      - name: balance_before
+        value: "rand('0','10000')"
+      - name: balance_after
+        value: "context.balance_before + context.amount"
+        depends:
+          - balance_before
+          - amount
+      - name: amount
+        value: "rand('0', '1000')"

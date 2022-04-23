@@ -5,7 +5,7 @@ namespace Devian2011\Seeder\Configuration;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 use Symfony\Component\Yaml\Yaml;
 
-class ConfigurationLoader extends \Symfony\Component\ExpressionLanguage\ExpressionLanguage
+class ConfigurationLoader
 {
     private string $templateDir;
 
@@ -72,6 +72,7 @@ class ConfigurationLoader extends \Symfony\Component\ExpressionLanguage\Expressi
         foreach ($tables as $table) {
             $columns = $this->buildColumns($table['columns']);
             $relativeColumns = $this->buildRelativeColumns($table['relations'] ?? []);
+            $fixedColumns = $this->buildFixedColumns($table['fixed'] ?? []);
             $result[] = new Table(
                 $table['database'],
                 $table['name'],
@@ -79,6 +80,7 @@ class ConfigurationLoader extends \Symfony\Component\ExpressionLanguage\Expressi
                 $columns,
                 $relativeColumns,
                 $table['rowQuantity'],
+                $fixedColumns,
                 $table['primaryKey']
             );
         }
@@ -89,7 +91,7 @@ class ConfigurationLoader extends \Symfony\Component\ExpressionLanguage\Expressi
     {
         $result = [];
         foreach ($columns as $column) {
-            $result[] = new Column($column['name'], $column['value']);
+            $result[] = new Column($column['name'], $column['value'], $columns['depends'] ?? []);
         }
         return $result;
     }
@@ -106,6 +108,17 @@ class ConfigurationLoader extends \Symfony\Component\ExpressionLanguage\Expressi
                 $column['type'],
                 $column['throughTable'] ?? null
             );
+        }
+        return $result;
+    }
+
+    private function buildFixedColumns(array $rows): array
+    {
+        $result = [];
+        foreach ($rows as $i => $row) {
+            foreach ($row as $column) {
+                $result[$i][] = new Column($column['name'], $column['value'], $columns['depends'] ?? []);
+            }
         }
         return $result;
     }
