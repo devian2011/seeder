@@ -72,7 +72,7 @@ class ConfigurationLoader
         foreach ($tables as $table) {
             $columns = $this->buildColumns($table['columns']);
             $relativeColumns = $this->buildRelativeColumns($table['relations'] ?? []);
-            $fixedColumns = $this->buildFixedColumns($table['fixed'] ?? []);
+            $fixedColumns = $this->buildFixedColumns($table['fixed']);
             $result[] = new Table(
                 $table['database'],
                 $table['name'],

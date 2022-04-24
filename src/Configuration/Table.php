@@ -22,7 +22,7 @@ class Table
     private string $rowQuantity;
     /** @var string|array */
     private $primaryKey;
-    /** @var array */
+    /** @var Column[][] */
     private $fixed = [];
 
     /**
@@ -57,7 +57,14 @@ class Table
         }
         $this->rowQuantity = $rowQuantity;
         $this->primaryKey = $primaryKey;
-        $this->fixed = $fixed;
+
+        foreach ($fixed as $row){
+            $cols = [];
+            foreach ($row as $column){
+                $cols[$column->getName()] = $column;
+            }
+            $this->fixed[] = $cols;
+        }
     }
 
     /**

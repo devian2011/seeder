@@ -63,9 +63,13 @@ class TableColumnsResolver
     public function generate(Table $table): array
     {
         $result = [];
-        for ($row = 0; $row < $table->getRowQuantity(); $row++) {
+        foreach ($table->getFixed() as $row) {
+            $columns = $this->resolveColumns($row);
+            $result[] = $columns;
+        }
+        while (count($result) < $table->getRowQuantity()) {
             $columns = $this->resolveColumns($table->getColumns());
-            $result[$row] = $columns;
+            $result[] = $columns;
         }
 
         return $result;
