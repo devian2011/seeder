@@ -9,15 +9,17 @@ class Table
     public const TABLE_MODE_FAKE = 'fake';
 
     /** @var string */
+    private string $id;
+    /** @var string */
     private string $database;
     /** @var string */
     private string $name;
     /** @var string[] */
-    private array $mods;
+    private array $mods = [];
     /** @var Column[] */
-    private array $columns;
+    private array $columns = [];
     /** @var RelativeColumn[] */
-    private array $relations;
+    private array $relations = [];
     /** @var string */
     private string $rowQuantity;
     /** @var string|array */
@@ -32,7 +34,7 @@ class Table
      * @param Column[] $columns
      * @param RelativeColumn[] $relations
      * @param string $rowQuantity
-     * @param Column[] $fixed
+     * @param Column[][] $fixed
      * @param string|array $primaryKey
      */
     public function __construct(
@@ -46,6 +48,7 @@ class Table
                $primaryKey = 'id'
     )
     {
+        $this->id = sprintf("%s.%s", $database, $name);
         $this->database = $database;
         $this->name = $name;
         $this->mods = $mods;
@@ -58,13 +61,32 @@ class Table
         $this->rowQuantity = $rowQuantity;
         $this->primaryKey = $primaryKey;
 
-        foreach ($fixed as $row){
+        foreach ($fixed as $row) {
             $cols = [];
-            foreach ($row as $column){
+            foreach ($row as $column) {
                 $cols[$column->getName()] = $column;
             }
             $this->fixed[] = $cols;
         }
+        $this->generateId($this);
+    }
+
+    private function generateId(Table $table): void
+    {
+        $this->id = self::generateTableId($table->getDatabase(), $table->getName());
+    }
+
+    public static function generateTableId(string $database, string $name): string
+    {
+        return sprintf("%s.%s", $database, $name);
+    }
+
+    /**
+     * @return string
+     */
+    public function getId(): string
+    {
+        return $this->id;
     }
 
     /**

@@ -4,9 +4,9 @@ namespace Devian2011\Seeder\Configuration;
 
 class RelativeColumn
 {
-    private const RELATION_ONE_TO_ONE = 'oneToOne';
-    private const RELATION_MANY_TO_ONE = 'manyToOne';
-    private const MANY_TO_MANY = 'manyToMany';
+    public const RELATION_ONE_TO_ONE = 'oneToOne';
+    public const RELATION_MANY_TO_ONE = 'manyToOne';
+    public const RELATION_MANY_TO_MANY = 'manyToMany';
 
     private string $name;
     private string $database;

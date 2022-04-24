@@ -16,7 +16,6 @@ class TableDecorator
         $this->table = $table;
     }
 
-
     /**
      * @return string
      */

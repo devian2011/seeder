@@ -24,7 +24,6 @@ class ConfigurationLoader
             if ($fileInfo->isFile()) {
                 $conf = [];
                 $ext = $fileInfo->getExtension();
-                echo $fileInfo->getRealPath(), PHP_EOL;
                 if (in_array($ext, ['yml', 'yaml'])) {
                     $conf = Yaml::parseFile($fileInfo->getRealPath());
                 }
