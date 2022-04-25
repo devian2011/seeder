@@ -7,7 +7,8 @@ CREATE TABLE IF NOT EXISTS user_roles (
 CREATE TABLE IF NOT EXISTS users (
     id int auto_increment primary key,
     login varchar(100),
-    password varchar(100)
+    password varchar(100),
+    info_id int
 );
 
 CREATE TABLE IF NOT EXISTS users_salt(
@@ -24,3 +25,10 @@ CREATE TABLE IF NOT EXISTS transactions(
     percent decimal(10,2) default 0
 );
 
+CREATE TABLE IF NOT EXISTS info(
+    id int auto_increment primary key,
+    name varchar(200)
+);
+
+TRUNCATE info;
+INSERT INTO info (name) VALUES ('a'), ('b'), ('c'), ('d'), ('e'), ('f');

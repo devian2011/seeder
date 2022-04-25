@@ -17,6 +17,9 @@ class TableEraser
 
     public function erase(Node $node, Graph $schema)
     {
+        //If we load data from database. We cannot erase it.
+        if($node->getTable()->isLoadFromDb()) return;
+
         if ($node->hasChildren()) {
             foreach ($node->getChildren() as $child) {
                 $this->erase($schema->getNode($child), $schema);

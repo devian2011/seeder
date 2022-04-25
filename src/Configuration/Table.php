@@ -26,6 +26,8 @@ class Table
     private $primaryKey;
     /** @var Column[][] */
     private $fixed = [];
+    /** @var bool */
+    private bool $loadFromDb = false;
 
     /**
      * @param string $database
@@ -36,6 +38,7 @@ class Table
      * @param string $rowQuantity
      * @param Column[][] $fixed
      * @param string|array $primaryKey
+     * @param bool $loadFromDb
      */
     public function __construct(
         string $database,
@@ -45,7 +48,8 @@ class Table
         array  $relations,
         string $rowQuantity,
         array  $fixed = [],
-               $primaryKey = 'id'
+               $primaryKey = 'id',
+        bool   $loadFromDb = false
     )
     {
         $this->id = sprintf("%s.%s", $database, $name);
@@ -60,6 +64,7 @@ class Table
         }
         $this->rowQuantity = $rowQuantity;
         $this->primaryKey = $primaryKey;
+        $this->loadFromDb = $loadFromDb;
 
         foreach ($fixed as $row) {
             $cols = [];
@@ -146,15 +151,11 @@ class Table
     }
 
     /**
-     * This method used for OneToOne relation.
-     * Because in this relation type table rows quantity must be equal
-     *
-     * @param int $rowQuantity
-     * @return void
+     * @return bool
      */
-    public function setRowQuantity(int $rowQuantity): void
+    public function isLoadFromDb(): bool
     {
-        $this->rowQuantity = $rowQuantity;
+        return $this->loadFromDb;
     }
 
     /**

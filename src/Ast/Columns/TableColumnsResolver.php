@@ -60,6 +60,8 @@ class TableColumnsResolver
      */
     public function generate(Table $table): array
     {
+        if($table->isLoadFromDb()) return [];
+
         $result = [];
         foreach ($table->getFixed() as $row) {
             $columns = $this->resolveColumns($row);

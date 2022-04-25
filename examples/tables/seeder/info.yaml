@@ -1,0 +1,10 @@
+tables:
+  info:
+    database: seeder
+    mods:
+      - fake
+      - test
+    name: info
+    loadFromDb: 1
+    rowQuantity: 6
+    primaryKey: id

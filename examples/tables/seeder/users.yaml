@@ -20,3 +20,9 @@ tables:
         table: roles
         column: id
         type: manyToOne
+      - name: info_id
+        database: seeder
+        table: info
+        column: id
+        type: manyToOne
+        fromDb: true

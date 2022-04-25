@@ -64,6 +64,15 @@ class DatabaseLoader
 
     }
 
+    private function getDataFromDb(Node $node): array
+    {
+        return $this->connectionPool
+            ->getDb($node->getTable()->getDatabase())
+            ->getConn()
+            ->query("SELECT * FROM {$node->getTable()->getName()}")
+            ->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
     /**
      * @param Node $node
      * @param array $loadedTableData
@@ -75,6 +84,12 @@ class DatabaseLoader
     {
         //Skip handle if this data has been already loaded
         if (isset($loadedTableData[$node->getId()])) return;
+
+        //In this case we load data from db. Loaded data can not have relations to fake data
+        if ($node->getTable()->isLoadFromDb()) {
+            $loadedTableData[$node->getId()] = $this->getDataFromDb($node);
+            return;
+        }
 
         $data = $this->columnsResolver->generate($node->getTable());
 
