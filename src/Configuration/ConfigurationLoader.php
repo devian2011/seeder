@@ -81,9 +81,10 @@ class ConfigurationLoader
                 $table['rowQuantity'],
                 $fixedColumns,
                 $table['primaryKey'],
-                !empty($table['isLoadFromDb'])
+                !empty($table['loadFromDb'])
             );
         }
+
         return $result;
     }
 
