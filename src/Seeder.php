@@ -15,8 +15,15 @@ use Devian2011\Seeder\Configuration\Table;
 use Devian2011\Seeder\Db\DBConnectionFactory;
 use Devian2011\Seeder\Db\DBConnectionPool;
 use Devian2011\Seeder\Db\DBConnectionPoolInterface;
+use Devian2011\Seeder\Events\Event;
+use Devian2011\Seeder\Events\EventDispatcher;
+use Devian2011\Seeder\Events\EventsDispatcherInterface;
+use Devian2011\Seeder\Events\Listeners\DatabaseInsertionFailListener;
+use Devian2011\Seeder\Events\Listeners\DatabaseInsertRowSuccessListener;
+use Devian2011\Seeder\Events\Listeners\SeederProgressListener;
 use Devian2011\Seeder\Expressions\InternalExpressionLanguage;
 use Devian2011\Seeder\Loader\DatabaseLoader;
+use Devian2011\Seeder\Output\OutputInterface;
 use Faker\Factory;
 use Symfony\Component\Dotenv\Dotenv;
 use Symfony\Component\ExpressionLanguage\ExpressionFunctionProviderInterface;
@@ -58,21 +65,46 @@ class Seeder
      * @throws Db\DBConnectionConfigurationException
      * @throws \Throwable
      */
-    public function run(ExpressionFunctionProviderInterface $functionProvider = null)
+    public function run(
+        OutputInterface                     $output,
+        ExpressionFunctionProviderInterface $functionProvider = null,
+        array                               $eventHandlers = []
+    )
     {
+        $eventDispatcher = $this->buildEventDispatcher($output, $eventHandlers);
+        $eventDispatcher->notify(
+            SeederEvents::EVENT_SEEDER_START,
+            new Event('Seeder started...', [])
+        );
         $expressions = $this->buildExpressionLanguage($functionProvider);
         $config = $this->loadConfig($expressions);
+        $eventDispatcher->notify(
+            SeederEvents::EVENT_SEEDER_CONFIG_LOADED,
+            new Event('Config has been loaded...', ['config' => $config])
+        );
         $connectionPool = $this->initConnectionPool($config->getDatabases());
         $schema = $this->buildSchema(new NodeBuilder(), $config->getTables());
+        $eventDispatcher->notify(
+            SeederEvents::EVENT_SEEDER_SCHEMA_BUILT,
+            new Event('Schema has been built...', ['config' => $config])
+        );
         $tableValuesResolver = $this->buildTableColumnsResolver($expressions);
 
         $loader = new DatabaseLoader(
             $connectionPool,
             $schema,
-            $tableValuesResolver
+            $tableValuesResolver,
+            $eventDispatcher
         );
-
+        $eventDispatcher->notify(
+            SeederEvents::EVENT_SEEDER_LOADING_DATA,
+            new Event('Start data insertion', ['config' => $config])
+        );
         $loader->load();
+        $eventDispatcher->notify(
+            SeederEvents::EVENT_SEEDER_DATA_LOADED,
+            new Event('Data has been loaded', ['config' => $config])
+        );
     }
 
     private function buildExpressionLanguage(ExpressionFunctionProviderInterface $functionProvider = null): ExpressionLanguage
@@ -115,6 +147,18 @@ class Seeder
             new ColumnValueRegistryFactory(),
             new ColumnValueResolverFactory()
         );
+    }
+
+    public function buildEventDispatcher(OutputInterface $output, array $eventHandlers = []): EventsDispatcherInterface
+    {
+        $dispatcher = new EventDispatcher();
+        $dispatcher->subscribe(new DatabaseInsertionFailListener($output));
+        $dispatcher->subscribe(new DatabaseInsertRowSuccessListener($output));
+        $dispatcher->subscribe(new SeederProgressListener($output));
+        foreach ($eventHandlers as $handler) {
+            $dispatcher->subscribe($handler);
+        }
+        return $dispatcher;
     }
 
 }

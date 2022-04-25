@@ -2,6 +2,7 @@
 
 namespace Devian2011\Seeder\Commands;
 
+use Devian2011\Seeder\Output\SymfonyConsoleOutput;
 use Devian2011\Seeder\Seeder;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -27,7 +28,7 @@ class FillDataCommand extends Command
         $params = $input->getOption('params');
         try {
             $seeder = new Seeder($templateDir, $mode, explode(',', $params));
-            $seeder->run();
+            $seeder->run(new SymfonyConsoleOutput($output));
 
             return self::SUCCESS;
         } catch (\Throwable $throwable) {
