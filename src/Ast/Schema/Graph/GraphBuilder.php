@@ -1,6 +1,6 @@
 <?php
 
-namespace Devian2011\Seeder\Ast\Relations\Graph;
+namespace Devian2011\Seeder\Ast\Schema\Graph;
 
 use Devian2011\Seeder\Configuration\Table;
 
@@ -18,17 +18,17 @@ class GraphBuilder
      */
     public function __construct(array $tables, NodeBuilderInterface $nodeBuilder)
     {
-        foreach ($this->tables as $table) {
+        foreach ($tables as $table) {
             $this->tables[$table->getId()] = $table;
         }
-        $this->tables = $tables;
         $this->nodeBuilder = $nodeBuilder;
     }
 
-    public function build()
+    private function build()
     {
         $this->graph = new Graph();
         foreach ($this->tables as $table) {
+            //TODO: Optimize graph builder
             $this->graph->addNode($this->nodeBuilder->build($table, $this->tables, $this->graph));
         }
     }

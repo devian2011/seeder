@@ -4,22 +4,26 @@ tables:
     mods:
       - fake
       - test
-    name: transactions
-    rowQuantity: 1000
+    name: roles
+    rowQuantity: 5
     primaryKey: id
     columns:
       - name: id
         value: 'auto_increment'
       - name: name
-        value: 'faker.name()'
+        value: 'faker.word()'
       - name: is_active
-        value: 'faker.boolean()'
+        value: 'rand("0", "1")'
     fixed:
       - - name: id
           value: 1
         - name: name
-          value: admin
+          value: '"admin"'
+        - name: is_active
+          value: 1
       - - name: id
           value: 2
         - name: name
-          value: developer
+          value: '"developer"'
+        - name: is_active
+          value: 1

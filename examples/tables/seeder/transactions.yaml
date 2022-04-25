@@ -5,11 +5,11 @@ tables:
       - fake
       - test
     name: transactions
-    rowQuantity: 1000
+    rowQuantity: 10
     primaryKey: id
     columns:
       - name: id
-        value: "increment"
+        value: "auto_increment"
       - name: balance_before
         value: "rand('0','10000')"
       - name: balance_after
@@ -19,3 +19,14 @@ tables:
           - amount
       - name: amount
         value: "rand('0', '1000')"
+      - name: percent
+        value: "(context.balance_after / context.balance_before) * 100"
+        depends:
+          - balance_after
+          - balance_before
+    relations:
+      - name: user_id
+        database: seeder
+        table: users
+        column: id
+        type: manyToOne

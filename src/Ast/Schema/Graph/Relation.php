@@ -1,6 +1,6 @@
 <?php
 
-namespace Devian2011\Seeder\Ast\Relations\Graph;
+namespace Devian2011\Seeder\Ast\Schema\Graph;
 
 use Devian2011\Seeder\Configuration\RelativeColumn;
 

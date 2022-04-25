@@ -69,9 +69,9 @@ class ConfigurationLoader
     {
         $result = [];
         foreach ($tables as $table) {
-            $columns = $this->buildColumns($table['columns']);
+            $columns = $this->buildColumns($table['columns'] ?? []);
             $relativeColumns = $this->buildRelativeColumns($table['relations'] ?? []);
-            $fixedColumns = $this->buildFixedColumns($table['fixed']);
+            $fixedColumns = $this->buildFixedColumns($table['fixed'] ?? []);
             $result[] = new Table(
                 $table['database'],
                 $table['name'],
@@ -105,7 +105,7 @@ class ConfigurationLoader
                 $column['table'],
                 $column['column'],
                 $column['type'],
-                $column['throughTable'] ?? null
+                $column['throughTable'] ?? null //If it's not be set. PHP throws Warning about unknown index
             );
         }
         return $result;
@@ -116,7 +116,11 @@ class ConfigurationLoader
         $result = [];
         foreach ($rows as $i => $row) {
             foreach ($row as $column) {
-                $result[$i][] = new Column($column['name'], $column['value'], $columns['depends'] ?? []);
+                $result[$i][] = new Column(
+                    $column['name'],
+                    $column['value'],
+                    $columns['depends'] ?? []
+                );
             }
         }
         return $result;

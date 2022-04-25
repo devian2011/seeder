@@ -10,6 +10,7 @@ class InternalExpressionLanguage implements ExpressionFunctionProviderInterface
     {
         return [
             new EnvExpressionFunction(),
+            new RandExpressionFunction(),
         ];
     }
 

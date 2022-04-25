@@ -1,6 +1,6 @@
 <?php
 
-namespace Devian2011\Seeder\Ast\Relations\Graph;
+namespace Devian2011\Seeder\Ast\Schema\Graph;
 
 use Devian2011\Seeder\Configuration\Table;
 
@@ -14,14 +14,15 @@ class NodeBuilder implements NodeBuilderInterface
         if (empty($related)) {
             return $node;
         }
+
         foreach ($related as $relativeColumn) {
             $relativeTableId = Table::generateTableId($relativeColumn->getDatabase(), $relativeColumn->getTable());
-            if ($graph->hasNode($relativeTableId)) {
-                $relation = new Relation($graph->getNode($relativeTableId), $node, $relativeColumn);
-            } else {
-                $parentNode = self::build($tables[$relativeTableId], $tables, $graph);
-                $relation = new Relation($parentNode, $node, $relativeColumn);
-            }
+            $parentNode = $graph->hasNode($relativeTableId)
+                ? $graph->getNode($relativeTableId)
+                : self::build($tables[$relativeTableId], $tables, $graph);
+
+            $relation = new Relation($parentNode, $node, $relativeColumn);
+            $parentNode->addChild($node->getId());
             $node->addRelation($relation);
         }
 

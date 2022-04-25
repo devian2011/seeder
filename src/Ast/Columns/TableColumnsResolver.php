@@ -1,9 +1,7 @@
 <?php
 
-namespace Devian2011\Seeder\Ast;
+namespace Devian2011\Seeder\Ast\Columns;
 
-use Devian2011\Seeder\Ast\Columns\ColumnValueRegistryFactoryInterface;
-use Devian2011\Seeder\Ast\Columns\ColumnValueResolverFactoryInterface;
 use Devian2011\Seeder\Configuration\Column;
 use Devian2011\Seeder\Configuration\Table;
 use Faker\Generator;

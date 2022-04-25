@@ -4,9 +4,10 @@ namespace Devian2011\Seeder\Db;
 
 class DBConnectionPool implements DBConnectionPoolInterface
 {
+    /** @var DBConnectionFactoryInterface */
     private DBConnectionFactoryInterface $connectionFactory;
     /** @var DBConnection[] */
-    private array $pool;
+    private array $pool = [];
 
     public function __construct(DBConnectionFactoryInterface $connectionFactory)
     {
@@ -23,6 +24,7 @@ class DBConnectionPool implements DBConnectionPoolInterface
         if (!empty($this->pool[$code])) {
             if (!$this->pool[$code]->isConnected()) {
                 $this->pool[$code]->connect();
+                $this->pool[$code]->getConn()->beginTransaction();
             }
             return $this->pool[$code];
         }
@@ -30,9 +32,24 @@ class DBConnectionPool implements DBConnectionPoolInterface
         $conn = $this->connectionFactory->getDbConnection($code);
         if (!$conn->isConnected()) {
             $conn->connect();
+            $conn->getConn()->beginTransaction();
         }
         $this->pool[$code] = $conn;
         return $this->pool[$code];
+    }
+
+    public function poolCommit()
+    {
+        foreach ($this->pool as $conn){
+            $conn->getConn()->commit();
+        }
+    }
+
+    public function poolRollback()
+    {
+        foreach ($this->pool as $conn){
+            $conn->getConn()->rollBack();
+        }
     }
 
 }

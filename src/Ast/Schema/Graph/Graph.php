@@ -1,11 +1,11 @@
 <?php
 
-namespace Devian2011\Seeder\Ast\Relations\Graph;
+namespace Devian2011\Seeder\Ast\Schema\Graph;
 
 class Graph
 {
     /** @var Node[] */
-    private array $nodes;
+    private array $nodes = [];
 
     public function setNodes(array $nodes)
     {

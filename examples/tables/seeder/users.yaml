@@ -5,12 +5,18 @@ tables:
       - fake
       - test
     name: users
-    rowQuantity: "100"
+    rowQuantity: 5
     primaryKey: id
     columns:
       - name: id
-        value: "increment"
+        value: "auto_increment"
       - name: login
         value: "faker.email()"
       - name: password
-        value: "faker.text()"
+        value: "faker.word()"
+    relations:
+      - name: role_id
+        database: seeder
+        table: roles
+        column: id
+        type: manyToOne

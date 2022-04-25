@@ -1,6 +1,6 @@
 <?php
 
-namespace Devian2011\Seeder\Ast\Relations\Graph;
+namespace Devian2011\Seeder\Ast\Schema\Graph;
 
 use Devian2011\Seeder\Configuration\Table;
 
@@ -10,6 +10,8 @@ class Node
     private array $relations;
     /** @var Table */
     private Table $table;
+    /** @var array */
+    private array $children = [];
 
     public function __construct(Table $table)
     {
@@ -45,5 +47,25 @@ class Node
     public function getRelations(): array
     {
         return $this->relations;
+    }
+
+    public function hasRelations(): bool
+    {
+        return !empty($this->relations);
+    }
+
+    public function hasChildren(): bool
+    {
+        return !empty($this->children);
+    }
+
+    public function getChildren(): array
+    {
+        return $this->children;
+    }
+
+    public function addChild(string $childNodeName)
+    {
+        $this->children[] = $childNodeName;
     }
 }

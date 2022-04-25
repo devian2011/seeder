@@ -1,9 +1,9 @@
 <?php
 
-namespace Devian2011\Seeder\Tests\Ast\Relations\Graph;
+namespace Devian2011\Seeder\Tests\Ast\Schema\Graph;
 
-use Devian2011\Seeder\Ast\Relations\Graph\Graph;
-use Devian2011\Seeder\Ast\Relations\Graph\NodeBuilder;
+use Devian2011\Seeder\Ast\Schema\Graph\Graph;
+use Devian2011\Seeder\Ast\Schema\Graph\NodeBuilder;
 use Devian2011\Seeder\Configuration\RelativeColumn;
 use Devian2011\Seeder\Configuration\Table;
 use PHPUnit\Framework\TestCase;

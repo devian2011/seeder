@@ -1,21 +1,19 @@
 tables:
-  user_salt:
+  users_salt:
     database: seeder
     mods:
       - fake
       - test
     name: users_salt
-    rowQuantity: "identical(seeder, users)"
+    rowQuantity: 5
     primaryKey: id
     columns:
       - name: id
-        value: "increment"
-      - name: user_id
-        value: "relation"
+        value: "auto_increment"
     relations:
       - name: user_id
         database: seeder
-        table: user
+        table: users
         column: id
         type: oneToOne
 

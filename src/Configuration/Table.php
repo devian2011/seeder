@@ -146,6 +146,18 @@ class Table
     }
 
     /**
+     * This method used for OneToOne relation.
+     * Because in this relation type table rows quantity must be equal
+     *
+     * @param int $rowQuantity
+     * @return void
+     */
+    public function setRowQuantity(int $rowQuantity): void
+    {
+        $this->rowQuantity = $rowQuantity;
+    }
+
+    /**
      * @return Column[]
      */
     public function getFixed(): array

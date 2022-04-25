@@ -1,10 +1,10 @@
 <?php
 
-namespace Devian2011\Seeder\Tests\Ast;
+namespace Devian2011\Seeder\Tests\Ast\Columns;
 
 use Devian2011\Seeder\Ast\Columns\ColumnValueRegistryFactory;
 use Devian2011\Seeder\Ast\Columns\ColumnValueResolverFactory;
-use Devian2011\Seeder\Ast\TableColumnsResolver;
+use Devian2011\Seeder\Ast\Columns\TableColumnsResolver;
 use Devian2011\Seeder\Configuration\Column;
 use Devian2011\Seeder\Configuration\Table;
 use Faker\Generator;
@@ -140,6 +140,5 @@ class TableColumnsResolverTest extends TestCase
         $this->assertEquals(900, $fillData[1]['balance_before']);
         $this->assertEquals(1050, $fillData[1]['balance_after']);
         $this->assertEquals(150, $fillData[1]['amount']);
-
     }
 }
