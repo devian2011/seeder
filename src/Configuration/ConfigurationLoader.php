@@ -7,11 +7,11 @@ use Symfony\Component\Yaml\Yaml;
 
 class ConfigurationLoader
 {
-    private string $templateDir;
+    private array $templateDirs;
     
-    public function __construct(string $templateDir)
+    public function __construct(array $templateDirs)
     {
-        $this->templateDir = $templateDir;
+        $this->templateDirs = $templateDirs;
     }
     
     public function build(ExpressionLanguage $expressionLanguage): Root
@@ -26,23 +26,26 @@ class ConfigurationLoader
     private function parseFiles(): array
     {
         $configuration = [];
-        $directory = new \RecursiveDirectoryIterator($this->templateDir);
-        $iterator = new \RecursiveIteratorIterator($directory);
-        /** @var \SplFileInfo $fileInfo */
-        foreach ($iterator as $fileInfo) {
-            if ($fileInfo->isFile()) {
-                $conf = [];
-                $ext = $fileInfo->getExtension();
-                if (in_array($ext, ['yml', 'yaml'])) {
-                    $conf = Yaml::parseFile($fileInfo->getRealPath());
+        
+        foreach ($this->templateDirs as $templateDir){
+            $directory = new \RecursiveDirectoryIterator($templateDir);
+            $iterator = new \RecursiveIteratorIterator($directory);
+            /** @var \SplFileInfo $fileInfo */
+            foreach ($iterator as $fileInfo) {
+                if ($fileInfo->isFile()) {
+                    $conf = [];
+                    $ext = $fileInfo->getExtension();
+                    if (in_array($ext, ['yml', 'yaml'])) {
+                        $conf = Yaml::parseFile($fileInfo->getRealPath());
+                    }
+                    if ($ext === 'json') {
+                        $conf = json_decode(file_get_contents($fileInfo->getRealPath()), true);
+                    }
+                    if ($ext === 'php') {
+                        $conf = require_once $fileInfo->getRealPath();
+                    }
+                    $configuration = array_merge_recursive($configuration, $conf);
                 }
-                if ($ext === 'json') {
-                    $conf = json_decode(file_get_contents($fileInfo->getRealPath()), true);
-                }
-                if ($ext === 'php') {
-                    $conf = require_once $fileInfo->getRealPath();
-                }
-                $configuration = array_merge_recursive($configuration, $conf);
             }
         }
         

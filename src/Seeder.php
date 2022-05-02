@@ -33,25 +33,31 @@ class Seeder
 {
     private ConfigurationLoader $configurationLoader;
     private array $params;
-
-    public function __construct(string $templateDir, array $paramFiles)
+    
+    public function __construct(array $templateDirectories, array $paramFiles)
     {
-        if (!file_exists($templateDir) || !is_dir($templateDir)) {
-            throw new \RuntimeException("Template dir is not directory or does not exists. Path {$templateDir}");
+        if (empty($templateDirectories)) {
+            throw new \RuntimeException("Templates directories cannot be empty");
+        }
+        foreach ($templateDirectories as $td) {
+            if (!file_exists($td) || !is_dir($td)) {
+                throw new \RuntimeException("Template dir is not directory or does not exists. Path {$td}");
+            }
         }
         foreach ($paramFiles as $pFile) {
             if (!file_exists($pFile) || !is_file($pFile)) {
                 throw new \RuntimeException("File with params does not exist. File: {$pFile}");
             }
         }
-
-        $this->configurationLoader = new ConfigurationLoader($templateDir);
+        
+        $this->configurationLoader = new ConfigurationLoader($templateDirectories);
         $this->params = $paramFiles;
     }
-
-
+    
+    
     /**
      * @param ExpressionFunctionProviderInterface|null $functionProvider
+     *
      * @return void
      * @throws Db\DBConnectionConfigurationException
      * @throws \Throwable
@@ -80,7 +86,7 @@ class Seeder
             new Event('Schema has been built...', ['config' => $config])
         );
         $tableValuesResolver = $this->buildTableColumnsResolver($expressions);
-
+        
         $loader = new DatabaseLoader(
             $connectionPool,
             $schema,
@@ -97,49 +103,7 @@ class Seeder
             new Event('Data has been loaded', ['config' => $config])
         );
     }
-
-    private function buildExpressionLanguage(ExpressionFunctionProviderInterface $functionProvider = null): ExpressionLanguage
-    {
-        $expressions = new ExpressionLanguage(null, [
-            new InternalExpressionLanguage()
-        ]);
-        if (!empty($functionProvider)) {
-            $expressions->registerProvider($functionProvider);
-        }
-
-        return $expressions;
-    }
-
-    private function loadConfig(ExpressionLanguage $expressions): Root
-    {
-        (new Dotenv())->load(...$this->params);
-        return $this->configurationLoader->build($expressions);
-    }
-
-    /**
-     * @throws Db\DBConnectionConfigurationException
-     */
-    private function initConnectionPool(array $databases): DBConnectionPoolInterface
-    {
-        $databaseConnectionFactory = new DBConnectionFactory($databases);
-        return new DBConnectionPool($databaseConnectionFactory);
-    }
-
-    private function buildSchema(NodeBuilderInterface $nodeBuilder, array $tables): Graph
-    {
-        return (new GraphBuilder($tables, $nodeBuilder))->getGraph();
-    }
-
-    private function buildTableColumnsResolver(ExpressionLanguage $expressionLanguage): TableColumnsResolver
-    {
-        return new TableColumnsResolver(
-            Factory::create(),
-            $expressionLanguage,
-            new ColumnValueRegistryFactory(),
-            new ColumnValueResolverFactory()
-        );
-    }
-
+    
     public function buildEventDispatcher(OutputInterface $output, array $eventHandlers = []): EventsDispatcherInterface
     {
         $dispatcher = new EventDispatcher();
@@ -151,5 +115,47 @@ class Seeder
         }
         return $dispatcher;
     }
-
+    
+    private function buildExpressionLanguage(ExpressionFunctionProviderInterface $functionProvider = null): ExpressionLanguage
+    {
+        $expressions = new ExpressionLanguage(null, [
+            new InternalExpressionLanguage()
+        ]);
+        if (!empty($functionProvider)) {
+            $expressions->registerProvider($functionProvider);
+        }
+        
+        return $expressions;
+    }
+    
+    private function loadConfig(ExpressionLanguage $expressions): Root
+    {
+        (new Dotenv())->load(...$this->params);
+        return $this->configurationLoader->build($expressions);
+    }
+    
+    /**
+     * @throws Db\DBConnectionConfigurationException
+     */
+    private function initConnectionPool(array $databases): DBConnectionPoolInterface
+    {
+        $databaseConnectionFactory = new DBConnectionFactory($databases);
+        return new DBConnectionPool($databaseConnectionFactory);
+    }
+    
+    private function buildSchema(NodeBuilderInterface $nodeBuilder, array $tables): Graph
+    {
+        return (new GraphBuilder($tables, $nodeBuilder))->getGraph();
+    }
+    
+    private function buildTableColumnsResolver(ExpressionLanguage $expressionLanguage): TableColumnsResolver
+    {
+        return new TableColumnsResolver(
+            Factory::create(),
+            $expressionLanguage,
+            new ColumnValueRegistryFactory(),
+            new ColumnValueResolverFactory()
+        );
+    }
+    
 }

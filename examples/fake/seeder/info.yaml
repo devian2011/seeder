@@ -5,3 +5,4 @@ tables:
     loadFromDb: 1
     rowQuantity: 6
     primaryKey: id
+    

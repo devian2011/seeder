@@ -22,10 +22,10 @@ class FillDataCommand extends Command
 
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $templateDir = $input->getOption('templates-dir');
+        $templateDirs = explode(',', $input->getOption('templates-dir'));
         $params = $input->getOption('params');
         try {
-            $seeder = new Seeder($templateDir, explode(',', $params));
+            $seeder = new Seeder($templateDirs, explode(',', $params));
             $seeder->run(new SymfonyConsoleOutput($output));
 
             return self::SUCCESS;

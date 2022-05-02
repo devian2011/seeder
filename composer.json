@@ -1,37 +1,40 @@
 {
-    "name": "devian2011/seeder",
-    "description": "Database seeder for test and fake data. Also it works with predefined values",
-    "type": "project",
-    "license": "MIT",
-    "bin": ["bin/seeder.php"],
-    "autoload": {
-        "psr-4": {
-            "Devian2011\\Seeder\\": "src/",
-            "Devian2011\\Seeder\\Tests\\": "tests/"
-        }
-    },
-    "authors": [
-        {
-            "name": "Ilya Romanov",
-            "email": "romanov.i.u@yandex.ru"
-        }
-    ],
-    "minimum-stability": "stable",
-    "require": {
-        "php": ">=7.4",
-        "monolog/monolog": "2.*",
-        "symfony/console": "5.4.*",
-        "symfony/yaml": "^5.4",
-        "symfony/expression-language": "^5.4",
-        "symfony/dotenv": "^5.4",
-        "fakerphp/faker": "^1.19"
-    },
-    "require-dev": {
-        "phpunit/phpunit": "9.5.*"
-    },
-    "scripts": {
-        "test": [
-            "phpunit"
-        ]
+  "name": "devian2011/seeder",
+  "description": "Database seeder for test and fake data. Also it works with predefined values",
+  "type": "project",
+  "license": "MIT",
+  "bin": [
+    "bin/seeder.php"
+  ],
+  "autoload": {
+    "psr-4": {
+      "Devian2011\\Seeder\\": "src/",
+      "Devian2011\\Seeder\\Tests\\": "tests/"
     }
+  },
+  "authors": [
+    {
+      "name": "Ilya Romanov",
+      "email": "romanov.i.u@yandex.ru"
+    }
+  ],
+  "minimum-stability": "stable",
+  "require": {
+    "php": ">=7.4",
+    "monolog/monolog": "2.*",
+    "symfony/console": "5.4.*",
+    "symfony/yaml": "^5.4",
+    "symfony/expression-language": "^5.4",
+    "symfony/dotenv": "^5.4",
+    "fakerphp/faker": "^1.19",
+    "ext-json": "*"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "9.5.*"
+  },
+  "scripts": {
+    "test": [
+      "phpunit"
+    ]
+  }
 }
