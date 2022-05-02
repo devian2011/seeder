@@ -19,7 +19,6 @@ class TableColumnsResolverTest extends TestCase
         $table = new Table(
             "default",
             "users",
-            ["dev", "fake"],
             [
                 new Column(
                     "id",
@@ -86,7 +85,6 @@ class TableColumnsResolverTest extends TestCase
         $table = new Table(
             "default",
             "users",
-            ["dev", "fake"],
             [],
             [],
             2,

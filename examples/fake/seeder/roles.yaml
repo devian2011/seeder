@@ -1,9 +1,6 @@
 tables:
   roles:
     database: seeder
-    mods:
-      - fake
-      - test
     name: roles
     rowQuantity: 5
     primaryKey: id

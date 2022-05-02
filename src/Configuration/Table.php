@@ -4,18 +4,12 @@ namespace Devian2011\Seeder\Configuration;
 
 class Table
 {
-    public const TABLE_MODE_PREDEFINED = 'predefined';
-    public const TABLE_MODE_TEST = 'test';
-    public const TABLE_MODE_FAKE = 'fake';
-
     /** @var string */
     private string $id;
     /** @var string */
     private string $database;
     /** @var string */
     private string $name;
-    /** @var string[] */
-    private array $mods = [];
     /** @var Column[] */
     private array $columns = [];
     /** @var RelativeColumn[] */
@@ -43,7 +37,6 @@ class Table
     public function __construct(
         string $database,
         string $name,
-        array  $mods,
         array  $columns,
         array  $relations,
         string $rowQuantity,
@@ -55,7 +48,6 @@ class Table
         $this->id = sprintf("%s.%s", $database, $name);
         $this->database = $database;
         $this->name = $name;
-        $this->mods = $mods;
         foreach ($columns as $column) {
             $this->columns[$column->getName()] = $column;
         }
@@ -109,15 +101,7 @@ class Table
     {
         return $this->name;
     }
-
-    /**
-     * @return string[]
-     */
-    public function getMods(): array
-    {
-        return $this->mods;
-    }
-
+    
     /**
      * @return Column[]
      */

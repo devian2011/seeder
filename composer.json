@@ -3,6 +3,7 @@
     "description": "Database seeder for test and fake data. Also it works with predefined values",
     "type": "project",
     "license": "MIT",
+    "bin": ["bin/seeder.php"],
     "autoload": {
         "psr-4": {
             "Devian2011\\Seeder\\": "src/",

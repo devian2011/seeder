@@ -17,17 +17,15 @@ class FillDataCommand extends Command
     protected function configure()
     {
         $this->addOption('templates-dir', 'td', InputOption::VALUE_REQUIRED, 'Path to templates dir')
-            ->addOption('mode', 'm', InputOption::VALUE_REQUIRED, 'Mode - fake, test, predefined')
-            ->addOption('params', 'p', InputOption::VALUE_REQUIRED, 'Path to .env files');
+            ->addOption('params', 'p', InputOption::VALUE_OPTIONAL, 'Path to .env files');
     }
 
     public function execute(InputInterface $input, OutputInterface $output)
     {
         $templateDir = $input->getOption('templates-dir');
-        $mode = $input->getOption('mode');
         $params = $input->getOption('params');
         try {
-            $seeder = new Seeder($templateDir, $mode, explode(',', $params));
+            $seeder = new Seeder($templateDir, explode(',', $params));
             $seeder->run(new SymfonyConsoleOutput($output));
 
             return self::SUCCESS;

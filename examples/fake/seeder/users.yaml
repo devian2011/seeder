@@ -1,9 +1,6 @@
 tables:
   users:
     database: seeder
-    mods:
-      - fake
-      - test
     name: users
     rowQuantity: 5
     primaryKey: id

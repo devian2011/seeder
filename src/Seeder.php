@@ -31,22 +31,13 @@ use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
 class Seeder
 {
-    private const AVAILABLE_MODES = [
-        Table::TABLE_MODE_FAKE,
-        Table::TABLE_MODE_PREDEFINED,
-        Table::TABLE_MODE_TEST
-    ];
-
     private ConfigurationLoader $configurationLoader;
     private array $params;
 
-    public function __construct(string $templateDir, string $mode, array $paramFiles)
+    public function __construct(string $templateDir, array $paramFiles)
     {
         if (!file_exists($templateDir) || !is_dir($templateDir)) {
             throw new \RuntimeException("Template dir is not directory or does not exists. Path {$templateDir}");
-        }
-        if (!in_array($mode, self::AVAILABLE_MODES)) {
-            throw new \RuntimeException("Unknown seeder mode: {$mode}");
         }
         foreach ($paramFiles as $pFile) {
             if (!file_exists($pFile) || !is_file($pFile)) {

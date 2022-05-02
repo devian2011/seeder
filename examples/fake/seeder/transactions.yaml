@@ -1,9 +1,6 @@
 tables:
   transactions:
     database: seeder
-    mods:
-      - fake
-      - test
     name: transactions
     rowQuantity: 10
     primaryKey: id

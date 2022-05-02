@@ -16,9 +16,9 @@ class TableEraserTest extends TestCase
 
     public function testErase()
     {
-        $nodeParent = new Node(new Table('admin', 'first', [], [], [], 0, [], 'id'));
-        $nodeChild1 = new Node(new Table('admin', 'child1', [], [], [], 0, [], 'id'));
-        $nodeChild2 = new Node(new Table('admin', 'child2', [], [], [], 0, [], 'id'));
+        $nodeParent = new Node(new Table('admin', 'first', [], [], 0, [], 'id'));
+        $nodeChild1 = new Node(new Table('admin', 'child1', [], [],  0, [], 'id'));
+        $nodeChild2 = new Node(new Table('admin', 'child2', [], [], 0, [], 'id'));
 
         $nodeParent->addChild($nodeChild1->getId());
         $nodeChild1->addChild($nodeChild2->getId());

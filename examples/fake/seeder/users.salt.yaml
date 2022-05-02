@@ -1,9 +1,6 @@
 tables:
   users_salt:
     database: seeder
-    mods:
-      - fake
-      - test
     name: users_salt
     rowQuantity: 5
     primaryKey: id

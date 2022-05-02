@@ -8,12 +8,21 @@ use Symfony\Component\Yaml\Yaml;
 class ConfigurationLoader
 {
     private string $templateDir;
-
+    
     public function __construct(string $templateDir)
     {
         $this->templateDir = $templateDir;
     }
-
+    
+    public function build(ExpressionLanguage $expressionLanguage): Root
+    {
+        $configuration = $this->parseFiles();
+        $databases = $this->buildDatabases($configuration['databases'], $expressionLanguage);
+        $tables = $this->buildTables($configuration['tables']);
+        
+        return new Root($databases, $tables);
+    }
+    
     private function parseFiles(): array
     {
         $configuration = [];
@@ -36,22 +45,17 @@ class ConfigurationLoader
                 $configuration = array_merge_recursive($configuration, $conf);
             }
         }
-
+        
         return $configuration;
     }
-
-    public function build(ExpressionLanguage $expressionLanguage): Root
-    {
-        $configuration = $this->parseFiles();
-        $databases = $this->buildDatabases($configuration['databases'], $expressionLanguage);
-        $tables = $this->buildTables($configuration['tables']);
-
-        return new Root($databases, $tables);
-    }
-
+    
     private function buildDatabases(array $dbs, ExpressionLanguage $expressionLanguage): array
     {
         $result = [];
+        if (empty($dbs)) {
+            throw new ConfigurationException(
+                "For use seed you must set databases section which contains database connection configs");
+        }
         foreach ($dbs as $dbConf) {
             $result[] = new Database(
                 $dbConf['code'],
@@ -61,10 +65,10 @@ class ConfigurationLoader
                 $dbConf['options'] ?? []
             );
         }
-
+        
         return $result;
     }
-
+    
     private function buildTables(array $tables): array
     {
         $result = [];
@@ -75,7 +79,6 @@ class ConfigurationLoader
             $result[] = new Table(
                 $table['database'],
                 $table['name'],
-                $table['mods'],
                 $columns,
                 $relativeColumns,
                 $table['rowQuantity'],
@@ -84,10 +87,10 @@ class ConfigurationLoader
                 !empty($table['loadFromDb'])
             );
         }
-
+        
         return $result;
     }
-
+    
     private function buildColumns(array $columns): array
     {
         $result = [];
@@ -96,7 +99,7 @@ class ConfigurationLoader
         }
         return $result;
     }
-
+    
     private function buildRelativeColumns(array $columns): array
     {
         $result = [];
@@ -112,7 +115,7 @@ class ConfigurationLoader
         }
         return $result;
     }
-
+    
     private function buildFixedColumns(array $rows): array
     {
         $result = [];

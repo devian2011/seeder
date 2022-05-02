@@ -14,7 +14,7 @@ class NodeBuilderTest extends TestCase
     public function testBuild()
     {
         $tables = [
-            'admin.users' => new Table('admin', 'users', [], [], [
+            'admin.users' => new Table('admin', 'users', [], [
                 new RelativeColumn(
                     'role_id',
                     'admin',
@@ -32,8 +32,8 @@ class NodeBuilderTest extends TestCase
                     null
                 ),
             ], 1, [], 'id'),
-            'admin.user_roles' => new Table('admin', 'user_roles', [], [], [], 1, [], 'id'),
-            'info.user_info' => new Table('info', 'user_info', [], [], [], 1, [], 'id')
+            'admin.user_roles' => new Table('admin', 'user_roles', [], [], 1, [], 'id'),
+            'info.user_info' => new Table('info', 'user_info', [], [], 1, [], 'id')
         ];
 
         $nodeBuilder = new NodeBuilder();

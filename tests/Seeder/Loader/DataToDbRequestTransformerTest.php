@@ -11,7 +11,7 @@ class DataToDbRequestTransformerTest extends TestCase
 
     public function testTransformDataToSql()
     {
-        $table = new Table('admin', 'users', [], [], [], 2, [], 'id');
+        $table = new Table('admin', 'users', [], [], 2, [], 'id');
         $data = [
             ['login' => 'test', 'password' => 'pTest2'],
             ['login' => 'test2', 'password' => 'passwordTestSome']
