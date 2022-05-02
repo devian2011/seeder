@@ -11,7 +11,7 @@ RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
     && chmod +x composer.phar \
     && mv composer.phar /usr/bin/composer
 
-RUN apt-get update && apt-get install git
+RUN apt-get update && apt-get install -y git
 RUN docker-php-ext-install pdo_mysql
 
 WORKDIR /app
