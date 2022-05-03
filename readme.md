@@ -112,7 +112,7 @@ tables: # Required section name
         table: info
         column: id
         type: manyToOne
-        fromDb: true # If column have relation with already loaded data. For it works, table with loaded data must have annotation
+        fromDb: true # If column have relation with already loaded data. Table with loaded data must have notation
     fixed: # If we need to fill predefined data. Everything works like columns section 
       - - name: id
           value: 1
